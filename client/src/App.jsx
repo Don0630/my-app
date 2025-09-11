@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import useDarkMode from "./hooks/useDarkMode";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
-import { useState } from "react";
-import useDarkMode from "./hooks/useDarkMode";
+import Water from "./pages/Water";
+import Electricity from "./pages/Electricity";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile drawer
@@ -45,6 +47,8 @@ function App() {
           <div className="flex-1 overflow-y-auto p-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/water" element={<Water />} />
+              <Route path="/electricity" element={<Electricity />} />
               {/* Add more routes here */}
             </Routes>
           </div>
