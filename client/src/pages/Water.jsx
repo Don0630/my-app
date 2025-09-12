@@ -69,9 +69,9 @@ export default function Water() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-1">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
+      <div className="bg-white dark:bg-gray-800 shadow">
         {/* Card Header with Search */}
-        <div className="bg-blue-500 text-white px-4 py-2 rounded-t-xl flex justify-between items-center">
+        <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
           <h3 className="font-semibold">Water Consumption</h3>
           <div className="flex items-center space-x-2 z-[1001]">
             <input
@@ -119,7 +119,7 @@ export default function Water() {
           </MapContainer>
 
           {/* Barangay Details (now on top-left) */}
-          <div className="absolute top-4 left-4 bg-white shadow rounded-lg p-3 w-64 z-[1000]">
+          <div className="absolute top-4 left-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
             <h3 className="font-semibold text-gray-700 text-sm">Barangay Details</h3>
             {selected ? (
               <div className="mt-1">
@@ -134,7 +134,7 @@ export default function Water() {
           </div>
 
           {/* Legend (now on top-right) */}
-          <div className="absolute top-4 right-4 bg-white shadow rounded-lg p-2 text-xs z-[1000] w-40">
+          <div className="absolute top-4 right-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
             <h3 className="font-semibold mb-1">Consumption (cu.m)</h3>
             <ul className="space-y-0.5">
               {[

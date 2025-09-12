@@ -1,41 +1,39 @@
-// pages/Electricity.jsx
+// pages/HumanResources.jsx
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import tabukBrgys from "../data/tabukBrgys.json";
-import { electricityConsumption } from "../data/electricityData";
+import { hrData } from "../data/hrData";
 
-export default function Electricity() {
+export default function HumanResources() {
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
 
-  const electricityLookup = useMemo(
+  const hrLookup = useMemo(
     () =>
       Object.fromEntries(
-        electricityConsumption.map((b) => [b.barangay, b.consumption])
+        hrData.map((b) => [b.barangay, b.employees])
       ),
     []
   );
 
   const getColor = (value) =>
-    value > 50000
-      ? "#4b0082"
-      : value > 40000
-      ? "#6a0dad"
-      : value > 30000
-      ? "#9370db"
-      : value > 20000
-      ? "#b19cd9"
-      : value > 10000
-      ? "#d8bfd8"
-      : "#e6e6fa";
+    value > 20
+      ? "#006400"
+      : value > 15
+      ? "#228B22"
+      : value > 10
+      ? "#32CD32"
+      : value > 5
+      ? "#7CFC00"
+      : "#ADFF2F";
 
   const defaultStyle = (feature) => {
     const name = feature.properties.NAME_3;
-    const consumption = electricityLookup[name] || 0;
+    const employees = hrLookup[name] || 0;
     return {
-      fillColor: getColor(consumption),
+      fillColor: getColor(employees),
       weight: 1,
       color: "white",
       fillOpacity: 0.7,
@@ -44,15 +42,15 @@ export default function Electricity() {
 
   const highlightStyle = {
     weight: 3,
-    color: "#4b0082",
+    color: "#006400",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
     layer.on("click", () => {
-      const consumption = electricityLookup[name] || 0;
-      setSelected({ name, consumption, feature });
+      const employees = hrLookup[name] || 0;
+      setSelected({ name, employees, feature });
     });
   };
 
@@ -62,8 +60,8 @@ export default function Electricity() {
     );
     if (feature) {
       const name = feature.properties.NAME_3;
-      const consumption = electricityLookup[name] || 0;
-      setSelected({ name, consumption, feature });
+      const employees = hrLookup[name] || 0;
+      setSelected({ name, employees, feature });
     }
   };
 
@@ -71,8 +69,8 @@ export default function Electricity() {
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
         {/* Card Header with Search */}
-        <div className="bg-purple-500 text-white px-4 py-2 flex justify-between items-center">
-          <h3 className="font-semibold">Electricity Consumption</h3>
+        <div className="bg-green-600 text-white px-4 py-2 flex justify-between items-center">
+          <h3 className="font-semibold">Human Resources</h3>
           <div className="flex items-center space-x-2 z-[1001]">
             <input
               type="text"
@@ -83,7 +81,7 @@ export default function Electricity() {
             />
             <button
               onClick={handleSearch}
-              className="px-2 py-1 bg-white text-purple-600 rounded shadow relative z-[1001] flex items-center justify-center"
+              className="px-2 py-1 bg-white text-green-600 rounded shadow relative z-[1001] flex items-center justify-center"
             >
               <MagnifyingGlassIcon className="w-4 h-4" />
             </button>
@@ -125,7 +123,7 @@ export default function Electricity() {
               <div className="mt-1">
                 <p className="font-bold text-sm">{selected.name}</p>
                 <p className="text-xs text-gray-600">
-                  Electricity Consumption: {selected.consumption.toLocaleString()} kWh
+                  Employees: {selected.employees}
                 </p>
               </div>
             ) : (
@@ -135,15 +133,14 @@ export default function Electricity() {
 
           {/* Legend */}
           <div className="absolute top-4 right-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-            <h3 className="font-semibold mb-1">Consumption (kWh)</h3>
+            <h3 className="font-semibold mb-1">Employees</h3>
             <ul className="space-y-0.5">
               {[
-                { color: "#e6e6fa", label: "0–10k" },
-                { color: "#d8bfd8", label: "10–20k" },
-                { color: "#b19cd9", label: "20–30k" },
-                { color: "#9370db", label: "30–40k" },
-                { color: "#6a0dad", label: "40–50k" },
-                { color: "#4b0082", label: "50k+" },
+                { color: "#ADFF2F", label: "0–5" },
+                { color: "#7CFC00", label: "6–10" },
+                { color: "#32CD32", label: "11–15" },
+                { color: "#228B22", label: "16–20" },
+                { color: "#006400", label: "21+" },
               ].map((item, idx) => (
                 <li key={idx}>
                   <span

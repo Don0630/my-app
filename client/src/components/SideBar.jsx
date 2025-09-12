@@ -57,26 +57,38 @@ export default function Sidebar({ collapsed, mobile = false }) {
       </div>
 
       {/* Menu */}
-      <nav className="flex-1 p-2">
-        {menuItems.map((item, idx) => (
-          <NavLink
-            key={idx}
-            to={item.path}
-            className={({ isActive }) =>
-              `flex items-center rounded transition text-sm ${
-                collapsed ? "justify-center p-3" : "gap-3 p-2"
-              } ${
-                isActive
-                  ? "bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-300 font-semibold"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-blue-800"
-              }`
-            }
-          >
-            {item.icon}
-            {!collapsed && <span>{item.name}</span>}
-          </NavLink>
-        ))}
-      </nav>
+<nav className="flex-1 p-2">
+  {menuItems.map((item, idx) => (
+    <div key={idx}>
+<NavLink
+  to={item.path}
+  className={({ isActive }) =>
+    `flex items-center rounded transition text-sm no-underline ${
+      collapsed ? "justify-center p-3" : "gap-4 p-4"
+    } ${
+      isActive
+        ? "bg-blue-500 text-white visited:text-white hover:bg-blue-600 hover:text-white font-semibold"
+        : "text-gray-600 dark:text-gray-400 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white dark:hover:text-white"
+    }`
+  }
+>
+  {item.icon}
+  {!collapsed && <span>{item.name}</span>}
+</NavLink>
+
+
+
+
+
+
+      {/* Divider after "Business Locator Maps" */}
+      {item.name === "Business Locator Maps" && (
+        <div className="my-2 border-t border-gray-300 dark:border-gray-700" />
+      )}
+    </div>
+  ))}
+</nav>
+
     </div>
   );
 }

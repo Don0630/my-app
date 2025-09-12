@@ -4,8 +4,15 @@ import useDarkMode from "./hooks/useDarkMode";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
+import Maps from "./pages/Maps";
+import Analytics from "./pages/Analytics";
+import Transportation from "./pages/Transportation";
 import Water from "./pages/Water";
 import Electricity from "./pages/Electricity";
+import Residential from "./pages/Residential";
+import Business from "./pages/Business";
+import Crime from "./pages/Crime";
+import HumanResources from "./pages/HumanResources";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile drawer
@@ -20,7 +27,7 @@ function App() {
 
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
-          <div className="fixed inset-0 z-50 flex md:hidden">
+          <div className="fixed inset-0 z-[1002] flex md:hidden">
             {/* Background overlay */}
             <div
               className="fixed inset-0 bg-black bg-opacity-50"
@@ -47,9 +54,15 @@ function App() {
           <div className="flex-1 overflow-y-auto p-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/Analytics" element={<Analytics />} />
+              <Route path="/transport" element={<Transportation />} />
+              <Route path="/maps" element={<Maps />} />
               <Route path="/water" element={<Water />} />
               <Route path="/electricity" element={<Electricity />} />
-              {/* Add more routes here */}
+              <Route path="/residential" element={<Residential />} />
+              <Route path="/business" element={<Business />} />
+              <Route path="/crime" element={<Crime />} />
+              <Route path="/human" element={<HumanResources />} />
             </Routes>
           </div>
         </div>
