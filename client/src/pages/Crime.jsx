@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { crimeData } from "../data/crimeData";
-
+import { Shield } from "lucide-react";
 export default function Crime() {
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
@@ -72,25 +72,36 @@ export default function Crime() {
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
         {/* Card Header with Search */}
-        <div className="bg-red-600 text-white px-4 py-2 flex justify-between items-center" style={{ backgroundColor: "#CC0000" }}>
-          <h3 className="font-semibold">Crime Incidents</h3>
-          <div className="flex items-center space-x-2 z-[1001]">
-            <input
-              type="text"
-              placeholder="Search Barangay..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
-            />
-            <button
-              onClick={handleSearch}
-              className="px-2 py-1 bg-white rounded shadow relative z-[1001] flex items-center justify-center"
-              style={{ color: "#E60000" }}
-            >
-              <MagnifyingGlassIcon className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+<div
+  className="text-white px-4 py-2 flex justify-between items-center"
+  style={{ backgroundColor: "#CC0000" }}
+>
+  {/* Left side: Title */}
+
+  <div className="flex items-center space-x-2">
+  <Shield className="w-5 h-5" />
+  <h3 className="font-semibold text-sm sm:text-base">Crime Incidents</h3>
+  </div>
+
+  {/* Right side: Search */}
+  <div className="flex items-center space-x-2 z-[1001]">
+    <input
+      type="text"
+      placeholder="Search Barangay..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
+    />
+    <button
+      onClick={handleSearch}
+      className="px-2 py-1 bg-white rounded shadow relative z-[1001] flex items-center justify-center"
+      style={{ color: "#CC0000" }}
+    >
+      <MagnifyingGlassIcon className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+
 
         {/* Map Container */}
         <div className="relative h-[800px]">

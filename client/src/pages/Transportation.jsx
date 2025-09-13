@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { Bus } from "lucide-react"; 
 import tabukBrgys from "../data/tabukBrgys.json";
 import { transportData } from "../data/transportData";
 
@@ -72,24 +73,32 @@ export default function Transportation() {
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
         {/* Header with search */}
-        <div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center">
-          <h3 className="font-semibold">Transportation</h3>
-          <div className="flex items-center space-x-2 z-[1001]">
-            <input
-              type="text"
-              placeholder="Search Barangay..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
-            />
-            <button
-              onClick={handleSearch}
-              className="px-2 py-1 bg-white text-orange-600 rounded shadow relative z-[1001] flex items-center justify-center"
-            >
-              <MagnifyingGlassIcon className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+
+<div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center">
+  {/* Left side: Icon + Title */}
+  <div className="flex items-center space-x-2">
+    <Bus className="w-5 h-5" />
+    <h3 className="font-semibold text-sm sm:text-base">Transportation</h3>
+  </div>
+
+  {/* Right side: Search */}
+  <div className="flex items-center space-x-2 z-[1001]">
+    <input
+      type="text"
+      placeholder="Search Barangay..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
+    />
+    <button
+      onClick={handleSearch}
+      className="px-2 py-1 bg-white text-orange-600 rounded shadow relative z-[1001] flex items-center justify-center"
+    >
+      <MagnifyingGlassIcon className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+
 
         {/* Map */}
         <div className="relative h-[800px]">
