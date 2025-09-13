@@ -72,7 +72,7 @@ export default function Water() {
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
         {/* Card Header with Search */}
-<div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
+<div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
   {/* Left side: Icon + Title */}
   <div className="flex items-center space-x-2">
     <Droplet className="w-5 h-5" />
