@@ -90,7 +90,7 @@ export default function Crime() {
       placeholder="Search Barangay..."
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
+      className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
     />
     <button
       onClick={handleSearch}

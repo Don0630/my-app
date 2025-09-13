@@ -86,7 +86,7 @@ export default function Water() {
       placeholder="Search Barangay..."
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="px-2 py-1 rounded border border-gray-300 text-xs text-black relative z-[1001]"
+      className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
     />
     <button
       onClick={handleSearch}
@@ -104,6 +104,9 @@ export default function Water() {
             zoom={11}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
+            doubleClickZoom={false}    // disable double-tap zoom
+            touchZoom={false}          // disable pinch/touch zoom
+            scrollWheelZoom={false} 
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
@@ -127,11 +130,11 @@ export default function Water() {
 
           {/* Barangay Details (now on top-left) */}
           <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
-            <h3 className="font-semibold text-gray-700 text-sm">Barangay Details</h3>
+            <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">Barangay Details</h3>
             {selected ? (
               <div className="mt-1">
-                <p className="font-bold text-sm">{selected.name}</p>
-                <p className="text-xs text-gray-600">
+                <p className="font-bold text-sm text-gray-900 dark:text-gray">{selected.name}</p>
+                <p className="text-xs text-gray-700 dark:text-gray-700">
                   Water Consumption: {selected.consumption.toLocaleString()} cu.m
                 </p>
               </div>
