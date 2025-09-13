@@ -39,7 +39,7 @@ export default function Maps() {
       id: "humanresources",
       label: "Employees",
       name: "Employees:",
-      color: "text-geen-500",
+      color: "text-green-500",
       icon: <Users size={16} className="text-green-500" />,
       component: <HumanResources />,
       total: totals.humanresources,
@@ -65,7 +65,7 @@ export default function Maps() {
     {
       id: "electricity",
       label: "Electricity",
-      name: "Power kWh):",
+      name: "Power (kWh):",
       color: "text-purple-500",
       icon: <Zap size={16} className="text-purple-500" />,
       component: <Electricity />,
@@ -74,7 +74,7 @@ export default function Maps() {
     {
       id: "residential",
       label: "Residential Population",
-      name: "Populations:",
+      name: "Population:",
       color: "text-pink-500",
       icon: <Home size={16} className="text-pink-500" />,
       component: <Residential />,
@@ -100,8 +100,8 @@ export default function Maps() {
     },
   ];
 
-  // 👉 Compute total of all tabs dynamically
-  const totalAll = tabs.reduce((sum, tab) => sum + tab.total, 0);
+  // Tabs that render a map
+  const mapTabs = ["humanresources", "transportation", "water", "electricity", "residential", "business", "crime"];
 
   return (
     <div className="grid gap-6 lg:grid-cols-1 relative">
@@ -110,50 +110,49 @@ export default function Maps() {
         <div className="bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar rounded-t-xl">
           {tabs.map((tab) => (
             <div
-              role="tab"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center flex-shrink-0 gap-2 px-4 py-2 rounded-t-lg transition-all border cursor-pointer select-none
+              className={`flex items-center flex-shrink-0 gap-2 px-3 py-2 rounded-t-lg cursor-pointer select-none border transition-all
                 ${
                   activeTab === tab.id
                     ? "bg-white dark:bg-gray-900 border-gray-300 border-b-0 shadow-md font-semibold text-black dark:text-white"
                     : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                 }`}
             >
-              {/* Colored Icon */}
               <span className={tab.color}>{tab.icon}</span>
-              {/* Show text only on desktop */}
               <span className="hidden sm:block text-sm">{tab.label}</span>
             </div>
           ))}
         </div>
 
         {/* Active Tab Content */}
-        <div>{tabs.find((t) => t.id === activeTab)?.component}</div>
+        <div className={mapTabs.includes(activeTab) ? "relative h-[800px]" : ""}>
+          {tabs.find((t) => t.id === activeTab)?.component}
+
+          {/* Summary Card for Map Tabs */}
+          {mapTabs.includes(activeTab) && (
+            <div className="absolute bottom-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
+              <h3 className="font-semibold text-gray-700 dark:text-gray-700 mb-2 text-center">
+                Profiles
+              </h3>
+              <ul className="space-y-1 text-xs">
+                {tabs.map((tab) => (
+                  <li
+                    key={tab.id}
+                    className="flex justify-between items-center text-gray-600 dark:text-gray-600"
+                  >
+                    <span className="flex items-center gap-1">
+                      <span className={tab.color}>{tab.icon}</span>
+                      <span className="hidden sm:inline">{tab.name}</span>
+                    </span>
+                    <span className="font-medium">{tab.total.toLocaleString()}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
-
-{/* ✅ Transparent Summary Card */}
-<div className="absolute bottom-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
-  <h3 className="font-semibold text-gray-700 dark:text-gray-700 mb-2 text-center">
-    Profiles
-  </h3>
-  <ul className="space-y-1 text-xs">
-    {tabs.map((tab) => (
-      <li
-        key={tab.id}
-        className="flex justify-between items-center text-gray-600 dark:text-gray-600"
-      >
-        <span className="flex items-center gap-1">
-          {/* Colored Icon */}
-          <span className={tab.color}>{tab.icon}</span>
-          <span className="hidden sm:inline">{tab.name}</span>
-        </span>
-        <span className="font-medium">{tab.total.toLocaleString()}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-
     </div>
   );
 }
