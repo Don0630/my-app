@@ -50,7 +50,7 @@ export default function Water() {
   };
 
   const onEachFeature = (feature, layer) => {
-    const name = feature.properties.NAME_3; 
+    const name = feature.properties.NAME_3;
     layer.on("click", () => {
       const consumption = waterLookup[name] || 0;
       setSelected({ name, consumption, feature });
@@ -70,32 +70,32 @@ export default function Water() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-1">
-      <div className="bg-white dark:bg-gray-800 shadow">
-        {/* Card Header with Search */}
-<div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center">
-  {/* Left side: Icon + Title */}
-  <div className="flex items-center space-x-2">
-    <Droplet className="w-5 h-5" />
-    <h3 className="font-semibold text-sm sm:text-base">Water Consumption</h3>
-  </div>
+      <div className="bg-white dark:bg-gray-800 shadow relative">
+        {/* Header with Search - OUTSIDE the map */}
+        <div className="bg-blue-500 text-white px-4 py-2 flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+          {/* Left side: Icon + Title */}
+          <div className="flex items-center space-x-2">
+            <Droplet className="w-5 h-5" />
+            <h3 className="font-semibold text-sm sm:text-base">Water Consumption</h3>
+          </div>
 
-  {/* Right side: Search */}
-  <div className="flex items-center space-x-2 z-[1001]">
-    <input
-      type="text"
-      placeholder="Search Barangay..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
-    />
-    <button
-      onClick={handleSearch}
-      className="px-2 py-1 bg-white text-blue-600 rounded shadow relative z-[1001] flex items-center justify-center"
-    >
-      <MagnifyingGlassIcon className="w-4 h-4" />
-    </button>
-  </div>
-</div>
+          {/* Right side: Search */}
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Search Barangay..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 px-2 py-1 rounded border border-gray-300 text-xs sm:text-sm text-black bg-white"
+            />
+            <button
+              onClick={handleSearch}
+              className="px-2 py-1 bg-white text-blue-600 rounded shadow flex items-center justify-center"
+            >
+              <MagnifyingGlassIcon className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
 
         {/* Map Container */}
         <div className="relative h-[800px]">
@@ -104,9 +104,6 @@ export default function Water() {
             zoom={11}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
-            doubleClickZoom={false}    // disable double-tap zoom
-            touchZoom={false}          // disable pinch/touch zoom
-            scrollWheelZoom={false} 
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
@@ -128,7 +125,7 @@ export default function Water() {
             )}
           </MapContainer>
 
-          {/* Barangay Details (now on top-left) */}
+          {/* Barangay Details */}
           <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
             <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">Barangay Details</h3>
             {selected ? (
@@ -143,32 +140,29 @@ export default function Water() {
             )}
           </div>
 
-{/* Legend */}
-<div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-  <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Consumption (cu.m)</h3>
+          {/* Legend */}
+          <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
+            <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Consumption (cu.m)</h3>
 
-  <ul className="flex flex-col items-center gap-1">
-    {[
-      { color: "#c6dbef", label: "0k - 10.0k" },
-      { color: "#9ecae1", label: "10.0k - 20.0k" },
-      { color: "#6baed6", label: "20.0k - 30.0k" },
-      { color: "#4292c6", label: "30.0k - 40.0k" },
-      { color: "#2171b5", label: "40.0k - 50.0k" },
-      { color: "#08306b", label: "50.0k+" },
-    ].map((item, idx) => (
-      <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
-        {/* Color box with fixed width */}
-        <span
-          className="w-3 h-3 block flex-shrink-0"
-          style={{ background: item.color, opacity: 0.7 }}
-        ></span>
-
-        {/* Label */}
-        <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
-      </li>
-    ))}
-  </ul>
-</div>
+            <ul className="flex flex-col items-center gap-1">
+              {[
+                { color: "#c6dbef", label: "0k - 10.0k" },
+                { color: "#9ecae1", label: "10.0k - 20.0k" },
+                { color: "#6baed6", label: "20.0k - 30.0k" },
+                { color: "#4292c6", label: "30.0k - 40.0k" },
+                { color: "#2171b5", label: "40.0k - 50.0k" },
+                { color: "#08306b", label: "50.0k+" },
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
+                  <span
+                    className="w-3 h-3 block flex-shrink-0"
+                    style={{ background: item.color, opacity: 0.7 }}
+                  ></span>
+                  <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
