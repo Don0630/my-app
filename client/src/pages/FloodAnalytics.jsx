@@ -16,7 +16,7 @@ export default function FloodAnalytics() {
     []
   );
 
-  const getFloodColor = (risk) =>
+  const getColor = (risk) =>
     risk === "High"
       ? "#08519c"
       : risk === "Moderate"
@@ -29,7 +29,7 @@ export default function FloodAnalytics() {
     const name = feature.properties.NAME_3;
     const risk = floodLookup[name] || "None";
     return {
-      fillColor: getFloodColor(risk),
+      fillColor: getColor(risk),
       weight: 1,
       color: "white",
       fillOpacity: 0.7,
@@ -59,40 +59,55 @@ export default function FloodAnalytics() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-1">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-        <div className="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Droplet size={16} /> Flood Assessment
-          </h3>
-          <div className="flex items-center space-x-2 z-[1001]">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-xl">
+        {/* Header */}
+        <div className="bg-blue-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
+          <div className="flex items-center space-x-2">
+            <Droplet className="w-5 h-5" />
+            <h3 className="font-semibold text-sm sm:text-base hidden sm:block">
+              Flood Assessment
+            </h3>
+          </div>
+          <div className="flex items-center space-x-2">
             <input
               type="text"
               placeholder="Search Barangay..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
+              className="px-2 py-1 rounded border border-gray-300 text-xs sm:text-sm text-black bg-white"
             />
             <button
               onClick={handleSearch}
-              className="px-2 py-1 bg-white text-blue-700 rounded shadow relative z-[1001] flex items-center justify-center"
+              className="px-2 py-1 bg-white text-blue-700 rounded shadow flex items-center justify-center"
             >
-              <MagnifyingGlassIcon className="w-4 h-4" />
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
 
+        {/* Map */}
         <div className="relative h-[800px]">
-          <MapContainer center={[17.45, 121.45]} zoom={11} style={{ height: "100%", width: "100%" }} zoomControl={false}>
+          <MapContainer
+            center={[17.45, 121.45]}
+            zoom={11}
+            style={{ height: "100%", width: "100%" }}
+            zoomControl={false}
+          >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <GeoJSON data={tabukBrgys} style={defaultStyle} onEachFeature={onEachFeature} />
-            {selected?.feature && <GeoJSON key={selected.name} data={selected.feature} style={() => highlightStyle} />}
+            {selected?.feature && (
+              <GeoJSON key={selected.name} data={selected.feature} style={() => highlightStyle} />
+            )}
           </MapContainer>
 
+          {/* Barangay Details */}
           <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
-            <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">Barangay Details</h3>
+            <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">
+              Barangay Details
+            </h3>
             {selected ? (
               <div className="mt-1">
                 <p className="font-bold text-sm text-gray-900 dark:text-gray">{selected.name}</p>
@@ -103,19 +118,22 @@ export default function FloodAnalytics() {
             )}
           </div>
 
+          {/* Legend */}
           <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
             <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Flood Risk</h3>
-            {[
-              { color: "#c6dbef", label: "None" },
-              { color: "#6baed6", label: "Low" },
-              { color: "#3182bd", label: "Moderate" },
-              { color: "#08519c", label: "High" },
-            ].map((item, idx) => (
-              <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
-                <span className="w-3 h-3 block flex-shrink-0" style={{ background: item.color, opacity: 0.7 }}></span>
-                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
-              </li>
-            ))}
+            <ul className="flex flex-col items-center gap-1">
+              {[
+                { color: "#c6dbef", label: "None" },
+                { color: "#6baed6", label: "Low" },
+                { color: "#3182bd", label: "Moderate" },
+                { color: "#08519c", label: "High" },
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
+                  <span className="w-3 h-3 block flex-shrink-0" style={{ background: item.color, opacity: 0.7 }}></span>
+                  <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

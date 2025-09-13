@@ -12,17 +12,13 @@ export default function Electricity() {
   const [search, setSearch] = useState("");
 
   const electricityLookup = useMemo(
-    () =>
-      Object.fromEntries(
-        electricityConsumption.map((b) => [b.barangay, b.consumption])
-      ),
+    () => Object.fromEntries(electricityConsumption.map((b) => [b.barangay, b.consumption])),
     []
   );
 
-  // Purple shades
   const getColor = (value) =>
     value > 50000
-      ? "#4b0082" // darkest purple
+      ? "#4b0082"
       : value > 40000
       ? "#6a0dad"
       : value > 30000
@@ -31,7 +27,7 @@ export default function Electricity() {
       ? "#b19cd9"
       : value > 10000
       ? "#d8bfd8"
-      : "#e6e6fa"; // lightest purple
+      : "#e6e6fa";
 
   const defaultStyle = (feature) => {
     const name = feature.properties.NAME_3;
@@ -46,7 +42,7 @@ export default function Electricity() {
 
   const highlightStyle = {
     weight: 3,
-    color: "#4b0082", // highlight dark purple
+    color: "#4b0082",
     fillOpacity: 0.9,
   };
 
@@ -72,34 +68,32 @@ export default function Electricity() {
   return (
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
-        {/* Card Header with Search */}
-<div className="bg-purple-600 text-white px-4 py-2 flex justify-between items-center">
-  {/* Left side: Icon + Title */}
-  <div className="flex items-center space-x-2">
-    <Zap className="w-5 h-5" />
-    <h3 className="font-semibold text-sm sm:text-base">Electricity Consumption</h3>
-  </div>
+        {/* Sticky Header */}
+        <div className="bg-purple-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
+          <div className="flex items-center space-x-2">
+            <Zap className="w-5 h-5" />
+            <h3 className="font-semibold text-sm sm:text-base hidden sm:block">
+              Electricity Consumption
+            </h3>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              placeholder="Search Barangay..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="px-2 py-1 sm:px-2 sm:py-1 rounded border border-gray-300 text-xs sm:text-sm text-black bg-white"
+            />
+            <button
+              onClick={handleSearch}
+              className="px-2 py-1 sm:px-2 sm:py-1 bg-white text-purple-700 rounded shadow flex items-center justify-center"
+            >
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
 
-  {/* Right side: Search */}
-  <div className="flex items-center space-x-2 z-[1001]">
-    <input
-      type="text"
-      placeholder="Search Barangay..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
-    />
-    <button
-      onClick={handleSearch}
-      className="px-2 py-1 bg-white text-purple-700 rounded shadow relative z-[1001] flex items-center justify-center"
-    >
-      <MagnifyingGlassIcon className="w-4 h-4" />
-    </button>
-  </div>
-</div>
-
-
-        {/* Map Container */}
+        {/* Map */}
         <div className="relative h-[800px]">
           <MapContainer
             center={[17.45, 121.45]}
@@ -129,10 +123,14 @@ export default function Electricity() {
 
           {/* Barangay Details */}
           <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
-            <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">Barangay Details</h3>
+            <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">
+              Barangay Details
+            </h3>
             {selected ? (
               <div className="mt-1">
-                <p className="font-bold text-sm text-gray-900 dark:text-gray">{selected.name}</p>
+                <p className="font-bold text-sm text-gray-900 dark:text-gray">
+                  {selected.name}
+                </p>
                 <p className="text-xs text-gray-700 dark:text-gray-700">
                   Power: {selected.consumption.toLocaleString()} kWh
                 </p>
@@ -144,8 +142,9 @@ export default function Electricity() {
 
           {/* Legend */}
           <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-            <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Consumption (kWh)</h3>
-
+            <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">
+              Consumption (kWh)
+            </h3>
             <ul className="flex flex-col items-center gap-1">
               {[
                 { color: "#e6e6fa", label: "0k - 10.0k" },
@@ -165,7 +164,6 @@ export default function Electricity() {
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </div>

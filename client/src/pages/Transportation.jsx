@@ -19,7 +19,6 @@ export default function Transportation() {
     []
   );
 
-  // Orange shades
   const getColor = (value) =>
     value > 50
       ? "#FF4500"
@@ -72,33 +71,30 @@ export default function Transportation() {
   return (
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
-        {/* Header with search */}
-
-<div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center">
-  {/* Left side: Icon + Title */}
-  <div className="flex items-center space-x-2">
-    <Bus className="w-5 h-5" />
-    <h3 className="font-semibold text-sm sm:text-base">Transportation</h3>
-  </div>
-
-  {/* Right side: Search */}
-  <div className="flex items-center space-x-2 z-[1001]">
-    <input
-      type="text"
-      placeholder="Search Barangay..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      className="px-2 py-1 rounded border border-gray-300 text-xs text-black bg-white relative z-[1001]"
-    />
-    <button
-      onClick={handleSearch}
-      className="px-2 py-1 bg-white text-orange-600 rounded shadow relative z-[1001] flex items-center justify-center"
-    >
-      <MagnifyingGlassIcon className="w-4 h-4" />
-    </button>
-  </div>
-</div>
-
+        {/* Header - sticky, outside map */}
+        <div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
+          <div className="flex items-center space-x-2">
+            <Bus className="w-5 h-5" />
+            <h3 className="font-semibold text-sm sm:text-base hidden sm:block">
+              Transportation
+            </h3>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              placeholder="Search Barangay..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="px-2 py-1 sm:px-2 sm:py-1 rounded border border-gray-300 text-xs sm:text-sm text-black bg-white"
+            />
+            <button
+              onClick={handleSearch}
+              className="px-2 py-1 sm:px-2 sm:py-1 bg-white text-orange-600 rounded shadow flex items-center justify-center"
+            >
+              <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
 
         {/* Map */}
         <div className="relative h-[800px]">
@@ -143,10 +139,9 @@ export default function Transportation() {
             )}
           </div>
 
-          {/* Legend stays unchanged */}
+          {/* Legend */}
           <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
             <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Vehicles</h3>
-
             <ul className="flex flex-col items-center gap-1">
               {[
                 { color: "#FEB24C", label: "0 - 400" },
@@ -166,7 +161,6 @@ export default function Transportation() {
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </div>
