@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import useDarkMode from "./hooks/useDarkMode";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
+import Sidebar from "./components/SideBar";
+import Navbar from "./components/NavBar";
 import Dashboard from "./pages/Dashboard";
 import Maps from "./pages/Maps";
 import Analytics from "./pages/Analytics";
