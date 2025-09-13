@@ -10,28 +10,27 @@ export default function Transportation() {
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
 
-  // lookup for vehicles/trips count
   const transportLookup = useMemo(
     () =>
       Object.fromEntries(
-        transportData.map((b) => [b.barangay, b.vehicles]) // <-- adjust field
+        transportData.map((b) => [b.barangay, b.vehicles])
       ),
     []
   );
 
-  // change thresholds for transport counts
+  // Orange shades
   const getColor = (value) =>
     value > 50
-      ? "#800026"
+      ? "#FF4500"
       : value > 40
-      ? "#BD0026"
+      ? "#FF6347"
       : value > 30
-      ? "#E31A1C"
+      ? "#FF7F50"
       : value > 20
-      ? "#FC4E2A"
+      ? "#FFA07A"
       : value > 10
-      ? "#FD8D3C"
-      : "#FEB24C";
+      ? "#FFB347"
+      : "#FFD580";
 
   const defaultStyle = (feature) => {
     const name = feature.properties.NAME_3;
@@ -46,7 +45,7 @@ export default function Transportation() {
 
   const highlightStyle = {
     weight: 3,
-    color: "#800026",
+    color: "#FF4500",
     fillOpacity: 0.9,
   };
 
@@ -73,7 +72,7 @@ export default function Transportation() {
     <div className="grid gap-6 lg:grid-cols-1">
       <div className="bg-white dark:bg-gray-800 shadow">
         {/* Header with search */}
-        <div className="bg-red-600 text-white px-4 py-2 flex justify-between items-center">
+        <div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center">
           <h3 className="font-semibold">Transportation</h3>
           <div className="flex items-center space-x-2 z-[1001]">
             <input
@@ -85,7 +84,7 @@ export default function Transportation() {
             />
             <button
               onClick={handleSearch}
-              className="px-2 py-1 bg-white text-red-600 rounded shadow relative z-[1001] flex items-center justify-center"
+              className="px-2 py-1 bg-white text-orange-600 rounded shadow relative z-[1001] flex items-center justify-center"
             >
               <MagnifyingGlassIcon className="w-4 h-4" />
             </button>
@@ -121,7 +120,7 @@ export default function Transportation() {
           </MapContainer>
 
           {/* Barangay Details */}
-          <div className="absolute top-4 left-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
+          <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
             <h3 className="font-semibold text-gray-700 text-sm">Barangay Details</h3>
             {selected ? (
               <div className="mt-1">
@@ -135,28 +134,30 @@ export default function Transportation() {
             )}
           </div>
 
-          {/* Legend */}
-          <div className="absolute top-4 right-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-            <h3 className="font-semibold mb-1">Vehicles</h3>
-            <ul className="space-y-0.5">
+          {/* Legend stays unchanged */}
+          <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
+            <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Vehicles</h3>
+
+            <ul className="flex flex-col items-center gap-1">
               {[
-                { color: "#FEB24C", label: "0–10" },
-                { color: "#FD8D3C", label: "11–20" },
-                { color: "#FC4E2A", label: "21–30" },
-                { color: "#E31A1C", label: "31–40" },
-                { color: "#BD0026", label: "41–50" },
-                { color: "#800026", label: "51+" },
+                { color: "#FEB24C", label: "0 - 400" },
+                { color: "#FD8D3C", label: "400 - 800" },
+                { color: "#FC4E2A", label: "800 - 1.2k" },
+                { color: "#E31A1C", label: "1.2k - 1.6k" },
+                { color: "#BD0026", label: "1.6k - 2.0k" },
+                { color: "#800026", label: "2.0k+" },
               ].map((item, idx) => (
-                <li key={idx}>
+                <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
                   <span
-                    className="inline-block w-3 h-3 mr-1"
+                    className="w-3 h-3 block flex-shrink-0"
                     style={{ background: item.color, opacity: 0.7 }}
                   ></span>
-                  {item.label}
+                  <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
                 </li>
               ))}
             </ul>
           </div>
+
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ export const transportData = [
   { barangay: "Taga", vehicles: 35 },
   { barangay: "Tuga", vehicles: 12 },
   { barangay: "Urbano Poblacion", vehicles: 55 },
-  { barangay: "Western Uma", vehicles: 10 },
+  { barangay: "Western Uma", vehicles: 1000 },
   { barangay: "Eastern Uma", vehicles: 14 },
   { barangay: "Mabato-Botigue", vehicles: 19 },
   { barangay: "Malin-awa", vehicles: 11 },

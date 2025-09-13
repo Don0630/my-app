@@ -40,7 +40,7 @@ export default function Sidebar({ collapsed, mobile = false }) {
       {/* Header */}
       <div
         className={`flex items-center ${
-          collapsed ? "justify-center" : "gap-2"
+          collapsed ? "justify-center" : "gap-6"
         } px-4 py-2 border-b dark:border-gray-700`}
       >
         <img
@@ -50,8 +50,8 @@ export default function Sidebar({ collapsed, mobile = false }) {
           style={{ boxShadow: "0 6px 12px rgba(0, 0, 0, 0.5)" }}
         />
         {!collapsed && (
-          <h1 className="text-lg font-bold text-blue-700 dark:text-blue-400 whitespace-nowrap">
-            Business Locator
+          <h1 className="text-sm font-bold text-gray-600 dark:text-white whitespace-nowrap" >
+          BUSINESS LOCATOR
           </h1>
         )}
       </div>
@@ -67,7 +67,7 @@ export default function Sidebar({ collapsed, mobile = false }) {
       collapsed ? "justify-center p-3" : "gap-4 p-4"
     } ${
       isActive
-        ? "bg-blue-500 text-white visited:text-white hover:bg-blue-600 hover:text-white font-semibold"
+        ? "bg-blue-500 text-white visited:text-white hover:bg-blue-600 hover:text-white font-semibold shadow-md"
         : "text-gray-600 dark:text-gray-400 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white dark:hover:text-white"
     }`
   }
@@ -75,6 +75,7 @@ export default function Sidebar({ collapsed, mobile = false }) {
   {item.icon}
   {!collapsed && <span>{item.name}</span>}
 </NavLink>
+
 
 
 

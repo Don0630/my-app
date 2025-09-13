@@ -19,15 +19,17 @@ export default function HumanResources() {
   );
 
   const getColor = (value) =>
-    value > 20
+    value > 2000
       ? "#006400"
-      : value > 15
+      : value > 1600
+      ? "#1F7F1F"
+      : value > 1200
       ? "#228B22"
-      : value > 10
-      ? "#32CD32"
-      : value > 5
-      ? "#7CFC00"
-      : "#ADFF2F";
+      : value > 800
+      ? "#339900"
+      : value > 400
+      ? "#66B200"
+      : "#99CC00";
 
   const defaultStyle = (feature) => {
     const name = feature.properties.NAME_3;
@@ -36,7 +38,7 @@ export default function HumanResources() {
       fillColor: getColor(employees),
       weight: 1,
       color: "white",
-      fillOpacity: 0.7,
+      fillOpacity: 0.85,
     };
   };
 
@@ -117,7 +119,7 @@ export default function HumanResources() {
           </MapContainer>
 
           {/* Barangay Details */}
-          <div className="absolute top-4 left-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
+          <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
             <h3 className="font-semibold text-gray-700 text-sm">Barangay Details</h3>
             {selected ? (
               <div className="mt-1">
@@ -132,22 +134,27 @@ export default function HumanResources() {
           </div>
 
           {/* Legend */}
-          <div className="absolute top-4 right-4 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-            <h3 className="font-semibold mb-1">Employees</h3>
-            <ul className="space-y-0.5">
+          <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
+            <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Employees</h3>
+
+            <ul className="flex flex-col items-center gap-1">
               {[
-                { color: "#ADFF2F", label: "0–5" },
-                { color: "#7CFC00", label: "6–10" },
-                { color: "#32CD32", label: "11–15" },
-                { color: "#228B22", label: "16–20" },
-                { color: "#006400", label: "21+" },
+                { color: "#99CC00", label: "0 - 400" },
+                { color: "#66B200", label: "400 - 800" },
+                { color: "#339900", label: "800 - 1.2k" },
+                { color: "#228B22", label: "1.2k - 1.6k" },
+                { color: "#1F7F1F", label: "1.6k - 2.0k" },
+                { color: "#006400", label: "2.0k+" },
               ].map((item, idx) => (
-                <li key={idx}>
+                <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
+                  {/* Color box */}
                   <span
-                    className="inline-block w-3 h-3 mr-1"
-                    style={{ background: item.color, opacity: 0.7 }}
+                    className="w-3 h-3 block flex-shrink-0"
+                    style={{ background: item.color, opacity: 0.85 }}
                   ></span>
-                  {item.label}
+
+                  {/* Label */}
+                  <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
                 </li>
               ))}
             </ul>
