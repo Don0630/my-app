@@ -47,7 +47,7 @@ export default function Maps() {
   const mapTabs = ["humanresources", "transportation", "water", "electricity", "residential", "business", "crime"];
 
   return (
-    <div className="grid gap-0 lg:grid-cols-1 relative">
+    <div className="grid gap-0 lg:grid-cols-1 relative sticky top-0">
       {/* Tabs Header - fully independent */}
       <div className="bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar rounded-t-xl">
         {tabs.map((tab) => (
