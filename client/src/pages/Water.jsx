@@ -122,14 +122,14 @@ export default function Water() {
         </MapContainer>
 
         {/* Barangay Details */}
-        <div className="absolute top-4 left-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
-          <h3 className="font-semibold text-gray-700 dark:text-gray-200 text-sm">
+        <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
+          <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">
             Barangay Details
           </h3>
           {selected ? (
             <div className="mt-1">
-              <p className="font-bold text-sm text-gray-900 dark:text-gray-100">{selected.name}</p>
-              <p className="text-xs text-gray-700 dark:text-gray-200">
+              <p className="font-bold text-sm text-gray-900 dark:text-gray-700">{selected.name}</p>
+              <p className="text-xs text-gray-700 dark:text-gray-700">
                 Water Consumption: {selected.consumption.toLocaleString()} cu.m
               </p>
             </div>
@@ -139,8 +139,8 @@ export default function Water() {
         </div>
 
         {/* Legend */}
-        <div className="absolute top-4 right-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-200 text-center">
+        <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-2 text-xs z-[1000] w-40">
+          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">
             Consumption (cu.m)
           </h3>
           <ul className="flex flex-col items-center gap-1">
@@ -157,7 +157,7 @@ export default function Water() {
                   className="w-3 h-3 block flex-shrink-0"
                   style={{ background: item.color, opacity: 0.7 }}
                 ></span>
-                <span className="text-xs text-gray-700 dark:text-gray-200 flex-1">{item.label}</span>
+                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
               </li>
             ))}
           </ul>

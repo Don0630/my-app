@@ -15,9 +15,9 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="grid gap-0 lg:grid-cols-1 relative sticky top-0">
-      {/* Tabs Header - fully independent */}
-      <div className="bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar rounded-t-xl">
+    <div className="flex flex-col h-[calc(100vh-56px)]">
+      {/* 🔹 Tabs Header sits BELOW the Navbar */}
+      <div className="sticky z-[1001] bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar shadow-sm">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -31,18 +31,16 @@ export default function Analytics() {
                   : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
               }`}
             >
-              {/* Colored Icon */}
               <span>{tab.icon}</span>
-              {/* Show text only on desktop */}
               <span className="hidden sm:block text-sm">{tab.label}</span>
             </div>
           );
         })}
       </div>
 
-      {/* Active Tab Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow relative">
-        <div className="relative h-[800px]">
+      {/* 🔹 Active Tab Content (fills the rest of the screen, doesn’t shift layout) */}
+      <div className="flex-1 relative overflow-hidden bg-white dark:bg-gray-800 rounded-b-xl shadow">
+        <div className="absolute inset-0">
           {tabs.find((t) => t.id === activeTab)?.component}
         </div>
       </div>

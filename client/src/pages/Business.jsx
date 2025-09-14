@@ -119,46 +119,46 @@ export default function Business() {
         </MapContainer>
 
         {/* Barangay Details */}
-        <div className="absolute top-4 left-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow rounded-lg p-3 w-52 z-[1000]">
-          <h3 className="font-semibold text-gray-700 dark:text-gray-200 text-sm">
+        <div className="absolute top-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
+          <h3 className="font-semibold text-gray-700 dark:text-gray-700 text-sm">
             Barangay Details
           </h3>
           {selected ? (
             <div className="mt-1">
-              <p className="font-bold text-sm text-gray-900 dark:text-gray-100">
+              <p className="font-bold text-sm text-gray-900 dark:text-gray-700">
                 {selected.name}
               </p>
-              <p className="text-xs text-gray-700 dark:text-gray-200">
+              <p className="text-xs text-gray-700 dark:text-gray-700">
                 Businesses: {selected.count}
               </p>
             </div>
           ) : (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
               Click a barangay on the map
             </p>
           )}
         </div>
 
         {/* Legend */}
-        <div className="absolute top-4 right-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md shadow rounded-lg p-2 text-xs z-[1000] w-40">
-          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-200 text-center">
+        <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-2 text-xs z-[1000] w-40">
+          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">
             Businesses
           </h3>
           <ul className="flex flex-col items-center gap-1">
             {[
-              { color: "#80deea", label: "0 - 5" },
-              { color: "#26c6da", label: "5 - 10" },
-              { color: "#00acc1", label: "10 - 15" },
-              { color: "#0097a7", label: "15 - 20" },
-              { color: "#00838f", label: "20 - 25" },
-              { color: "#006064", label: "25+" },
+              { color: "#80deea", label: "0 - 400" },
+              { color: "#26c6da", label: "400 - 800" },
+              { color: "#00acc1", label: "800 - 1.2k" },
+              { color: "#0097a7", label: "1.2k - 1.6k" },
+              { color: "#00838f", label: "1.6k - 2.0k" },
+              { color: "#006064", label: "2.0k+" },
             ].map((item, idx) => (
               <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
                 <span
                   className="w-3 h-3 block flex-shrink-0"
                   style={{ background: item.color, opacity: 0.7 }}
                 ></span>
-                <span className="text-xs text-gray-700 dark:text-gray-200 flex-1">{item.label}</span>
+                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
               </li>
             ))}
           </ul>

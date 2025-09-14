@@ -8,7 +8,7 @@ import Residential from "./Residential";
 import Business from "./Business";
 import Crime from "./Crime";
 
-// ✅ Data imports
+// Data imports
 import { hrData } from "../data/hrData";
 import { transportData } from "../data/transportData";
 import { waterConsumption } from "../data/waterData";
@@ -17,13 +17,12 @@ import { populationData } from "../data/populationData";
 import { businessData } from "../data/businessData";
 import { crimeData } from "../data/crimeData";
 
-// ✅ Lucide React Icons
+// Icons
 import { Users, Bus, Droplet, Zap, Home, Briefcase, Shield } from "lucide-react";
 
 export default function Maps() {
   const [activeTab, setActiveTab] = useState("humanresources");
 
-  // 👉 Compute totals from actual datasets
   const totals = {
     humanresources: hrData.length,
     transportation: transportData.length,
@@ -44,12 +43,12 @@ export default function Maps() {
     { id: "crime", label: "Crime", name: "Crimes:", color: "text-red-500", icon: <Shield size={16} className="text-red-500" />, component: <Crime />, total: totals.crime },
   ];
 
-  const mapTabs = ["humanresources", "transportation", "water", "electricity", "residential", "business", "crime"];
+  const mapTabs = ["humanresources","transportation","water","electricity","residential","business","crime"];
 
   return (
-    <div className="grid gap-0 lg:grid-cols-1 relative sticky top-0">
-      {/* Tabs Header - fully independent */}
-      <div className="bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar rounded-t-xl">
+    <div className="flex flex-col h-[calc(100vh-56px)]"> 
+      {/* 🔹 Tabs Header sits BELOW the Navbar (Navbar = 56px) */}
+      <div className="sticky z-[1001] bg-gray-200 dark:bg-gray-700 shadow-sm flex overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <div
             key={tab.id}
@@ -66,34 +65,31 @@ export default function Maps() {
         ))}
       </div>
 
-      {/* Map / Active Tab Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow relative">
-        <div className={mapTabs.includes(activeTab) ? "relative h-[800px]" : ""}>
+      {/* 🔹 Active Tab Content (map stays fixed, doesn’t push page) */}
+      <div className="flex-1 relative overflow-hidden">
+        <div className="absolute inset-0">
           {tabs.find((t) => t.id === activeTab)?.component}
-
-          {/* Summary Card for Map Tabs */}
-          {mapTabs.includes(activeTab) && (
-            <div className="absolute bottom-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
-              <h3 className="font-semibold text-gray-700 dark:text-gray-700 mb-2 text-center">
-                Profiles
-              </h3>
-              <ul className="space-y-1 text-xs">
-                {tabs.map((tab) => (
-                  <li
-                    key={tab.id}
-                    className="flex justify-between items-center text-gray-600 dark:text-gray-600"
-                  >
-                    <span className="flex items-center gap-1">
-                      <span className={tab.color}>{tab.icon}</span>
-                      <span className="hidden sm:inline">{tab.name}</span>
-                    </span>
-                    <span className="font-medium">{tab.total.toLocaleString()}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
+
+        {/* 🔹 Summary Card */}
+        {mapTabs.includes(activeTab) && (
+          <div className="absolute bottom-4 left-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-3 w-52 z-[1000]">
+            <h3 className="font-semibold text-gray-700 dark:text-gray-700 mb-2 text-center">
+              Profiles
+            </h3>
+            <ul className="space-y-1 text-xs">
+              {tabs.map((tab) => (
+                <li key={tab.id} className="flex justify-between items-center text-gray-700 dark:text-gray-700">
+                  <span className="flex items-center gap-1">
+                    <span className={tab.color}>{tab.icon}</span>
+                    <span className="inline">{tab.name}</span>
+                  </span>
+                  <span className="font-medium">{tab.total.toLocaleString()}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
