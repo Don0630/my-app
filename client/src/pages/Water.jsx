@@ -1,9 +1,8 @@
 // pages/Water.jsx
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Droplet } from "lucide-react";
+import "leaflet/dist/leaflet.css"; 
+import { Droplet, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { waterConsumption } from "../data/waterData";
 
@@ -44,17 +43,47 @@ export default function Water() {
   };
 
   const highlightStyle = {
-    weight: 3,
-    color: "#081D6B",
+    weight: 0,
+    color: "#08306b",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const consumption = waterLookup[name] || 0;
+
     layer.on("click", () => {
-      const consumption = waterLookup[name] || 0;
       setSelected({ name, consumption, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip visible on selection
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // close only if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${consumption.toLocaleString()} cu.m
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -71,7 +100,7 @@ export default function Water() {
   return (
     <div className="flex flex-col h-full">
       {/* Header - sticky */}
-      <div className="bg-blue-500 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
+      <div className="bg-blue-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
         <div className="flex items-center space-x-2">
           <Droplet className="w-5 h-5" />
           <h3 className="font-semibold text-sm sm:text-base">Water Consumption</h3>
@@ -86,9 +115,9 @@ export default function Water() {
           />
           <button
             onClick={handleSearch}
-            className="px-2 py-1 bg-white text-blue-600 rounded shadow flex items-center justify-center"
+            className="px-2 py-1 bg-white text-blue-700 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -130,7 +159,7 @@ export default function Water() {
             <div className="mt-1">
               <p className="font-bold text-sm text-gray-900 dark:text-gray-700">{selected.name}</p>
               <p className="text-xs text-gray-700 dark:text-gray-700">
-                Water Consumption: {selected.consumption.toLocaleString()} cu.m
+                Water: {selected.consumption.toLocaleString()} cu.m
               </p>
             </div>
           ) : (

@@ -2,8 +2,7 @@
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Bus } from "lucide-react";
+import { Bus, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { transportData } from "../data/transportData";
 
@@ -17,15 +16,15 @@ export default function Transportation() {
   );
 
   const getColor = (value) =>
-    value > 50
+    value > 100
       ? "#FF4500"
-      : value > 40
+      : value > 80
       ? "#FF6347"
-      : value > 30
+      : value > 60
       ? "#FF7F50"
-      : value > 20
+      : value > 40
       ? "#FFA07A"
-      : value > 10
+      : value > 20
       ? "#FFB347"
       : "#FFD580";
 
@@ -41,17 +40,47 @@ export default function Transportation() {
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#FF4500",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const vehicles = transportLookup[name] || 0;
+
     layer.on("click", () => {
-      const vehicles = transportLookup[name] || 0;
       setSelected({ name, vehicles, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip open when selected
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // only close if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${vehicles.toLocaleString()} vehicles
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -67,7 +96,7 @@ export default function Transportation() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
+      {/* Sticky Header */}
       <div className="bg-orange-600 text-white px-4 py-2 flex justify-between items-center sticky top-0 z-[1001]">
         <div className="flex items-center space-x-2">
           <Bus className="w-5 h-5" />
@@ -84,13 +113,12 @@ export default function Transportation() {
           <button
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-orange-600 rounded shadow flex items-center justify-center"
-          >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+          > <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
 
-      {/* Map */}
+      {/* Map Container */}
       <div className="flex-1 relative">
         <MapContainer
           center={[17.45, 121.45]}

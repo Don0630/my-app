@@ -46,7 +46,7 @@ export default function Maps() {
   const mapTabs = ["humanresources","transportation","water","electricity","residential","business","crime"];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)]"> 
+    <div className="flex flex-col h-[calc(100vh-70px)]"> 
       {/* 🔹 Tabs Header sits BELOW the Navbar (Navbar = 56px) */}
       <div className="sticky z-[1001] bg-gray-200 dark:bg-gray-700 shadow-sm flex overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (

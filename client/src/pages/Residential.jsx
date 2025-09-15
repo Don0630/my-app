@@ -2,8 +2,7 @@
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Building } from "lucide-react";
+import { Building, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { populationData } from "../data/populationData";
 
@@ -41,17 +40,47 @@ export default function Residential() {
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#880e4f",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const population = populationLookup[name] || 0;
+
     layer.on("click", () => {
-      const population = populationLookup[name] || 0;
       setSelected({ name, population, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip open when selected
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // only close if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${population.toLocaleString()} residents
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -85,7 +114,7 @@ export default function Residential() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-pink-700 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -137,7 +166,9 @@ export default function Residential() {
 
         {/* Legend */}
         <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-2 text-xs z-[1000] w-40">
-          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Population</h3>
+          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">
+            Population
+          </h3>
           <ul className="flex flex-col items-center gap-1">
             {[
               { color: "#f48fb1", label: "0 - 2.0k" },
@@ -152,7 +183,9 @@ export default function Residential() {
                   className="w-3 h-3 block flex-shrink-0"
                   style={{ background: item.color, opacity: 0.7 }}
                 ></span>
-                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
+                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">
+                  {item.label}
+                </span>
               </li>
             ))}
           </ul>

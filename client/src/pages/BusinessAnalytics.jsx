@@ -1,9 +1,8 @@
 // pages/BusinessAnalytics.jsx
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Briefcase } from "lucide-react";
+import "leaflet/dist/leaflet.css"; 
+import { Briefcase, Search } from "lucide-react";
 
 import tabukBrgys from "../data/tabukBrgys.json";
 import { businessData } from "../data/analyticsData";
@@ -12,13 +11,11 @@ export default function BusinessAnalytics() {
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
 
-  // Lookup for businesses by barangay
   const businessLookup = useMemo(
     () => Object.fromEntries(businessData.map((b) => [b.barangay, b.businesses])),
     []
   );
 
-  // Color scale
   const getColor = (value) =>
     value > 30
       ? "#006064"
@@ -43,13 +40,43 @@ export default function BusinessAnalytics() {
     };
   };
 
-  const highlightStyle = { weight: 3, color: "#006064", fillOpacity: 0.9 };
+  const highlightStyle = { weight: 0, color: "#006064", fillOpacity: 0.9 };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const count = businessLookup[name] || 0;
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${count} businesses
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
+
     layer.on("click", () => {
-      const count = businessLookup[name] || 0;
       setSelected({ name, count, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip();
+    });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip();
+      }
     });
   };
 
@@ -86,7 +113,7 @@ export default function BusinessAnalytics() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-cyan-700 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -104,7 +131,11 @@ export default function BusinessAnalytics() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <GeoJSON data={tabukBrgys} style={defaultStyle} onEachFeature={onEachFeature} />
+          <GeoJSON
+            data={tabukBrgys}
+            style={defaultStyle}
+            onEachFeature={onEachFeature}
+          />
 
           {selected && (
             <GeoJSON
@@ -150,10 +181,7 @@ export default function BusinessAnalytics() {
               { color: "#00838f", label: "20 - 30" },
               { color: "#006064", label: "30+" },
             ].map((item, idx) => (
-              <li
-                key={idx}
-                className="flex items-center gap-2 w-full max-w-[120px]"
-              >
+              <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
                 <span
                   className="w-3 h-3 block flex-shrink-0"
                   style={{ background: item.color, opacity: 0.7 }}

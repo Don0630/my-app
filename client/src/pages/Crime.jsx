@@ -2,8 +2,7 @@
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Shield } from "lucide-react";
+import { Shield, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { crimeData } from "../data/crimeData";
 
@@ -41,18 +40,50 @@ export default function Crime() {
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#990000",
     fillOpacity: 0.9,
   };
 
-  const onEachFeature = (feature, layer) => {
-    const name = feature.properties.NAME_3;
-    layer.on("click", () => {
-      const incidents = crimeLookup[name] || 0;
-      setSelected({ name, incidents, feature });
-    });
-  };
+const onEachFeature = (feature, layer) => {
+  const name = feature.properties.NAME_3;
+  const incidents = crimeLookup[name] || 0;
+
+  layer.on("click", () => {
+    setSelected({ name, incidents, feature });
+    layer.setStyle(highlightStyle);
+    if (layer.bringToFront) layer.bringToFront();
+    layer.openTooltip(); // keep tooltip open when selected
+  });
+
+  layer.on("mouseover", () => {
+    if (!selected || selected.name !== name) {
+      layer.setStyle(highlightStyle);
+    }
+    layer.openTooltip();
+  });
+
+  layer.on("mouseout", () => {
+    if (!selected || selected.name !== name) {
+      layer.setStyle(defaultStyle(feature));
+      layer.closeTooltip(); // only close if not selected
+    }
+  });
+
+  layer.bindTooltip(
+    `<div style="text-align:center; min-width:80px;">
+       <strong>${name}</strong><br/>
+       ${incidents} incidents
+     </div>`,
+    {
+      direction: "top",
+      sticky: true,
+      className: "custom-tooltip",
+    }
+  );
+};
+
+
 
   const handleSearch = () => {
     const feature = tabukBrgys.features.find(
@@ -85,7 +116,7 @@ export default function Crime() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-red-600 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>

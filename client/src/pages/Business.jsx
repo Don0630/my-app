@@ -2,8 +2,7 @@
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Briefcase } from "lucide-react";
+import { Briefcase, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { businessData } from "../data/businessData";
 
@@ -41,17 +40,47 @@ export default function Business() {
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#006064",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const count = businessLookup[name] || 0;
+
     layer.on("click", () => {
-      const count = businessLookup[name] || 0;
       setSelected({ name, count, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip open when selected
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // only close if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${count} businesses
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -85,7 +114,7 @@ export default function Business() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-cyan-700 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>

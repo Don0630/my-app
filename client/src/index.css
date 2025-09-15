@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Remove the black focus outline (square/rectangle) when features are clicked */
+.leaflet-interactive:focus {
+  outline: none !important;
+}
+
+
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

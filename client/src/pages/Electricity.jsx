@@ -1,9 +1,8 @@
 // pages/Electricity.jsx
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Zap } from "lucide-react"; 
+import "leaflet/dist/leaflet.css"; 
+import { Zap, Search } from "lucide-react"; 
 import tabukBrgys from "../data/tabukBrgys.json";
 import { electricityConsumption } from "../data/electricityData";
 
@@ -12,9 +11,10 @@ export default function Electricity() {
   const [search, setSearch] = useState("");
 
   const electricityLookup = useMemo(
-    () => Object.fromEntries(
-      electricityConsumption.map((b) => [b.barangay, b.consumption])
-    ),
+    () =>
+      Object.fromEntries(
+        electricityConsumption.map((b) => [b.barangay, b.consumption])
+      ),
     []
   );
 
@@ -43,17 +43,47 @@ export default function Electricity() {
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#4b0082",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const consumption = electricityLookup[name] || 0;
+
     layer.on("click", () => {
-      const consumption = electricityLookup[name] || 0;
       setSelected({ name, consumption, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip open when selected
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // only close if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${consumption.toLocaleString()} kWh
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -87,7 +117,7 @@ export default function Electricity() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-purple-700 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>

@@ -1,9 +1,8 @@
 // pages/HumanResources.jsx
 import { useState, useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Users } from "lucide-react";
+import "leaflet/dist/leaflet.css"; 
+import { Users, Search } from "lucide-react";
 import tabukBrgys from "../data/tabukBrgys.json";
 import { hrData } from "../data/hrData";
 
@@ -36,22 +35,52 @@ export default function HumanResources() {
       fillColor: getColor(employees),
       weight: 1,
       color: "white",
-      fillOpacity: 0.85,
+      fillOpacity: 0.7,
     };
   };
 
   const highlightStyle = {
-    weight: 3,
+    weight: 0,
     color: "#006400",
     fillOpacity: 0.9,
   };
 
   const onEachFeature = (feature, layer) => {
     const name = feature.properties.NAME_3;
+    const employees = hrLookup[name] || 0;
+
     layer.on("click", () => {
-      const employees = hrLookup[name] || 0;
       setSelected({ name, employees, feature });
+      layer.setStyle(highlightStyle);
+      if (layer.bringToFront) layer.bringToFront();
+      layer.openTooltip(); // keep tooltip open when selected
     });
+
+    layer.on("mouseover", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(highlightStyle);
+      }
+      layer.openTooltip();
+    });
+
+    layer.on("mouseout", () => {
+      if (!selected || selected.name !== name) {
+        layer.setStyle(defaultStyle(feature));
+        layer.closeTooltip(); // only close if not selected
+      }
+    });
+
+    layer.bindTooltip(
+      `<div style="text-align:center; min-width:80px;">
+         <strong>${name}</strong><br/>
+         ${employees.toLocaleString()} Employees
+       </div>`,
+      {
+        direction: "top",
+        sticky: true,
+        className: "custom-tooltip",
+      }
+    );
   };
 
   const handleSearch = () => {
@@ -85,7 +114,7 @@ export default function HumanResources() {
             onClick={handleSearch}
             className="px-2 py-1 bg-white text-green-600 rounded shadow flex items-center justify-center"
           >
-            <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
@@ -125,34 +154,45 @@ export default function HumanResources() {
           </h3>
           {selected ? (
             <div className="mt-1">
-              <p className="font-bold text-sm text-gray-900 dark:text-gray-700">{selected.name}</p>
+              <p className="font-bold text-sm text-gray-900 dark:text-gray-700">
+                {selected.name}
+              </p>
               <p className="text-xs text-gray-700 dark:text-gray-700">
-                Employees: {selected.employees}
+                Employees: {selected.employees.toLocaleString()}
               </p>
             </div>
           ) : (
-            <p className="text-xs text-gray-500 mt-1">Click a barangay on the map</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Click a barangay on the map
+            </p>
           )}
         </div>
 
         {/* Legend */}
         <div className="absolute top-4 right-4 bg-white/30 dark:bg-white-900/30 backdrop-blur-md shadow-lg rounded-lg p-2 text-xs z-[1000] w-40">
-          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">Employees</h3>
+          <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-700 text-center">
+            Employees
+          </h3>
           <ul className="flex flex-col items-center gap-1">
             {[
-              { color: "#99CC00", label: "0 - 2.0k" },
-              { color: "#66B200", label: "2.0k - 4.0k" },
-              { color: "#339900", label: "4.0k - 6.0k" },
-              { color: "#228B22", label: "6.0k - 8.0k" },
-              { color: "#1F7F1F", label: "8.0k - 10.0k" },
-              { color: "#006400", label: "10.0k+" },
+              { color: "#99CC00", label: "0 - 400" },
+              { color: "#66B200", label: "401 - 800" },
+              { color: "#339900", label: "801 - 1200" },
+              { color: "#228B22", label: "1201 - 1600" },
+              { color: "#1F7F1F", label: "1601 - 2000" },
+              { color: "#006400", label: "2000+" },
             ].map((item, idx) => (
-              <li key={idx} className="flex items-center gap-2 w-full max-w-[120px]">
+              <li
+                key={idx}
+                className="flex items-center gap-2 w-full max-w-[120px]"
+              >
                 <span
                   className="w-3 h-3 block flex-shrink-0"
-                  style={{ background: item.color, opacity: 0.85 }}
+                  style={{ background: item.color, opacity: 0.7 }}
                 ></span>
-                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">{item.label}</span>
+                <span className="text-xs text-gray-700 dark:text-gray-700 flex-1">
+                  {item.label}
+                </span>
               </li>
             ))}
           </ul>

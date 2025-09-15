@@ -15,7 +15,7 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)]">
+    <div className="flex flex-col h-[calc(100vh-70px)]">
       {/* 🔹 Tabs Header sits BELOW the Navbar */}
       <div className="sticky z-[1001] bg-gray-200 dark:bg-gray-700 flex overflow-x-auto no-scrollbar shadow-sm">
         {tabs.map((tab) => {
