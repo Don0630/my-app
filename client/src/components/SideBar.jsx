@@ -50,7 +50,7 @@ export default function Sidebar({ collapsed, mobile = false }) {
           style={{ boxShadow: "0 6px 12px rgba(0, 0, 0, 0.5)" }}
         />
         {!collapsed && (
-          <h1 className="text-sm font-bold text-gray-600 dark:text-white whitespace-nowrap" >
+          <h1 className="text-sm font-bold text-gray-600 dark:text-white whitespace-nowrap cursor-default">
           BUSINESS LOCATOR
           </h1>
         )}

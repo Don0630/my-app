@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Menu, Sun, Moon, Maximize, User } from "lucide-react";
 
 export default function Navbar({
@@ -37,9 +38,7 @@ export default function Navbar({
           <Menu size={18} />
         </a>
 
-        <h2 className="text-md text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 cursor-pointer">
-          Home
-        </h2>
+ 
       </div>
 
       {/* Right Section */}

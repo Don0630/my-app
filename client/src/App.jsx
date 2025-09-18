@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import useDarkMode from "./hooks/useDarkMode";
 import Sidebar from "./components/SideBar";
-import Navbar from "./components/NavBar";
+import Navbar from "./components/NavBar"; 
 import Dashboard from "./pages/Dashboard";
 import Maps from "./pages/Maps";
 import Analytics from "./pages/Analytics";
@@ -52,7 +52,7 @@ function App() {
             setDarkMode={setDarkMode}
           />
           <div className="flex-1 overflow-y-auto p-4">
-            <Routes>
+            <Routes> 
               <Route path="/" element={<Dashboard />} />
               <Route path="/Analytics" element={<Analytics />} />
               <Route path="/transport" element={<Transportation />} />
